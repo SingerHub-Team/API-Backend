@@ -1,5 +1,5 @@
 # Dokumentasi API - Rachman Ridwan (C23-PC608)
-URL Postman: https://crimson-meteor-286265.postman.co/workspace/fa951aa7-7621-4290-8e9e-56ea28be3b3a/documentation/20240322-ed86dd2a-8118-4eed-8142-32428b11c430
+URL Postman: https://crimson-meteor-286265.postman.co/workspace/My-Workspace~fa951aa7-7621-4290-8e9e-56ea28be3b3a/collection/20240322-ed86dd2a-8118-4eed-8142-32428b11c430?action=share&creator=20240322
 ## Deskripsi
 API yang telah dibuat adalah sebuah RESTful API yang digunakan untuk melakukan operasi otentikasi pengguna (Register, Login, Logout) dan operasi pembaruan profil pengguna.
 
