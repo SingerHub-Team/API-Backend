@@ -272,13 +272,11 @@ async def get_user_data(uid: str = None, id: str = None):
                 return {"message": "Data pengguna tidak ditemukan"}
         elif id:
             users_ref = db.collection("UserSingerHub")
-            query = users_ref.where("ID", "==", id)
-            docs = query.get()
-            if len(docs) > 0:
-                user_data = docs[0].to_dict()
-                return {"message": "Data pengguna ditemukan", "user_data": user_data}
-            else:
-                return {"message": "Data pengguna tidak ditemukan"}
+            query = users_ref.document(id)
+            data = query.get().to_dict()
+            if data is None:
+                return {"message": "User data not found"}
+            return {"message": "Data pengguna ditemukan", "user_data": data}
         else:
             return {"message": "Parameter UID atau ID harus diberikan"}
     except Exception as e:
