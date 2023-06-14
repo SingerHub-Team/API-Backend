@@ -51,7 +51,6 @@ async def login_user(request: Request):
 
     except Exception as e:
         return {"message": "Login gagal", "error": str(e)}
-# Pengujian: curl -X POST -d '{"email": "ridwan@singerhub.com", "password": "password123"}' -H "Content-Type: application/json" http://localhost:8000/login
 
 @app.post("/logout")
 async def logout_user(request: Request):
@@ -64,7 +63,6 @@ async def logout_user(request: Request):
         return {"message": "Logout berhasil"}
     except Exception as e:
         return {"message": "Logout gagal", "error": str(e)}
-# Pengujian: curl -X POST -d '{"id_token": "ID_TOKEN_AUTH_NYA"}' -H "Content-Type: application/json" http://localhost:8000/logout
 
 class RegisterUser(BaseModel):
     email: str
@@ -89,12 +87,6 @@ async def register_account(register_data: RegisterUser):
         return {"message": "Pengguna berhasil didaftarkan", "uid": user.uid}
     except Exception as e:
         return {"message": "Gagal mendaftarkan pengguna", "error": str(e)}
-# Pengujian:
-# curl -X POST -d '{
-#   "email": "ridwan@singerhub.com",
-#   "password": "password123",
-#   "nama_lengkap": "Rachman Ridwan"
-# }' -H "Content-Type: application/json" http://localhost:8000/register-account
 
 class UserData(BaseModel):
     id: str
@@ -144,20 +136,6 @@ async def register_data_without_auth(request: Request):
         return {"message": "Data pengguna berhasil disimpan"}
     except Exception as e:
         return {"message": "Gagal menyimpan data pengguna", "error": str(e)}
-# Pengujian:
-# curl -X POST -d '{
-#   "id": "8G9K6S",
-#   "nama_lengkap": "Budi Santoso",
-#   "umur": 25,
-#   "jenis_kelamin": "Laki-laki",
-#   "daerah_asal": "Jakarta",
-#   "pengalaman_bernyanyi": 5,
-#   "genre_musik": "Pop",
-#   "keterampilan_alat_musik": "Gitar",
-#   "alamat_tempat_tinggal": "Jl. Cendrawasih No. 12, Jakarta Pusat",
-#   "latitude": -6.18819,
-#   "longitude": 106.82497
-# }' -H "Content-Type: application/json" http://localhost:8000/register-data-without-auth
 
 @app.post("/register-data/{uid}")
 async def register_data(uid: str, request: Request):
@@ -183,20 +161,6 @@ async def register_data(uid: str, request: Request):
         return {"message": "Data pengguna berhasil disimpan"}
     except Exception as e:
         return {"message": "Gagal menyimpan data pengguna", "error": str(e)}
-# Pengujian:
-# curl -X POST -d '{
-#   "id": "8G9K6S",
-#   "nama_lengkap": "Budi Santoso",
-#   "umur": 25,
-#   "jenis_kelamin": "Laki-laki",
-#   "daerah_asal": "Jakarta",
-#   "pengalaman_bernyanyi": 5,
-#   "genre_musik": "Pop",
-#   "keterampilan_alat_musik": "Gitar",
-#   "alamat_tempat_tinggal": "Jl. Cendrawasih No. 12, Jakarta Pusat",
-#   "latitude": -6.18819,
-#   "longitude": 106.82497
-# }' -H "Content-Type: application/json" http://localhost:8000/register-data/USER_UID
 
 ## Perbarui Profil
 @app.put("/update-profile/{uid}")
@@ -243,20 +207,6 @@ async def update_profile_by_id(id: str, user_data: UserDataWithoutID):
         return {"message": "Profil berhasil diperbarui"}
     except Exception as e:
         return {"message": "Gagal memperbarui profil", "error": str(e)}
-# Pengujian:
-# curl -X PUT -d '{
-#   "id": "8G9K6S",
-#   "nama_lengkap": "Budi Santoso",
-#   "umur": 25,
-#   "jenis_kelamin": "Laki-laki",
-#   "daerah_asal": "Jakarta",
-#   "pengalaman_bernyanyi": 5,
-#   "genre_musik": "Pop",
-#   "keterampilan_alat_musik": "Gitar",
-#   "alamat_tempat_tinggal": "Jl. Cendrawasih No. 12, Jakarta Pusat",
-#   "latitude": -6.18819,
-#   "longitude": 106.82497
-# }' -H "Content-Type: application/json" http://localhost:8000/update-profile/USER_UID
 
 ## API Get User Data
 @app.get("/get-user-data")
@@ -281,13 +231,6 @@ async def get_user_data(uid: str = None, id: str = None):
             return {"message": "Parameter UID atau ID harus diberikan"}
     except Exception as e:
         return {"message": "Gagal mendapatkan data pengguna", "error": str(e)}
-
-## Perbarui Profil
-# ...
-
-if __name__ == "__main__":
-    # jalankan: uvicorn main:app --host 0.0.0.0 --port 8000
-    import uvicorn
 
 if __name__ == "__main__":
     # jalankan: uvicorn main:app --host 0.0.0.0 --port 8000
