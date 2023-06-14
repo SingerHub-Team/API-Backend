@@ -6,7 +6,14 @@ API yang telah dibuat adalah sebuah RESTful API yang digunakan untuk melakukan o
 Dokumentasi ini memberikan gambaran tentang API, protokol yang digunakan, endpoint-endpointnya, dan instruksi untuk menguji endpoint-endpoint tersebut menggunakan `curl` atau `POSTMAN`.
 
 ### Prasyarat
-Sebelum menjalankan program, pastikan dependensi berikut sudah terinstal:
+Sebelum menjalankan aplikasi, pastikan Anda memiliki prasyarat berikut:
+- Python 3.7 atau yang lebih baru
+- `pip` package manager
+- Proyek Firebase dengan Firestore diaktifkan
+- Kredensial SDK Admin Firebase (file JSON)
+- Paket `python-dotenv` (instal dengan `pip install python-dotenv`)
+
+Serta, pastikan dependensi berikut sudah terinstal:
 - `firebase_admin`
 - `python-dotenv`
 - `fastapi`
