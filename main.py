@@ -258,6 +258,39 @@ async def update_profile_by_id(id: str, user_data: UserDataWithoutID):
 #   "longitude": 106.82497
 # }' -H "Content-Type: application/json" http://localhost:8000/update-profile/USER_UID
 
+## API Get User Data
+@app.get("/get-user-data")
+async def get_user_data(uid: str = None, id: str = None):
+    try:
+        if uid:
+            doc_ref = db.collection("UserSingerHub").document(uid)
+            doc = doc_ref.get()
+            if doc.exists:
+                user_data = doc.to_dict()
+                return {"message": "Data pengguna ditemukan", "user_data": user_data}
+            else:
+                return {"message": "Data pengguna tidak ditemukan"}
+        elif id:
+            users_ref = db.collection("UserSingerHub")
+            query = users_ref.where("ID", "==", id)
+            docs = query.get()
+            if len(docs) > 0:
+                user_data = docs[0].to_dict()
+                return {"message": "Data pengguna ditemukan", "user_data": user_data}
+            else:
+                return {"message": "Data pengguna tidak ditemukan"}
+        else:
+            return {"message": "Parameter UID atau ID harus diberikan"}
+    except Exception as e:
+        return {"message": "Gagal mendapatkan data pengguna", "error": str(e)}
+
+## Perbarui Profil
+# ...
+
+if __name__ == "__main__":
+    # jalankan: uvicorn main:app --host 0.0.0.0 --port 8000
+    import uvicorn
+
 if __name__ == "__main__":
     # jalankan: uvicorn main:app --host 0.0.0.0 --port 8000
     import uvicorn
