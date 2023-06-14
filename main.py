@@ -66,66 +66,36 @@ async def logout_user(request: Request):
         return {"message": "Logout gagal", "error": str(e)}
 # Pengujian: curl -X POST -d '{"id_token": "ID_TOKEN_AUTH_NYA"}' -H "Content-Type: application/json" http://localhost:8000/logout
 
-class RegisterData(BaseModel):
-    id: str
+class RegisterUser(BaseModel):
+    email: str
+    password: str
     nama_lengkap: str
-    umur: int
-    jenis_kelamin: str
-    daerah_asal: str
-    pengalaman_bernyanyi: int
-    genre_musik: str
-    keterampilan_alat_musik: str
-    alamat_tempat_tinggal: str
-    latitude: float
-    longitude: float
 
-@app.post("/register")
-async def register_user(request: Request):
+@app.post("/register-account")
+async def register_account(register_data: RegisterUser):
     try:
-        data = await request.json()
-        email = data.get("email")
-        password = data.get("password")
-        register_data = RegisterData(**data.get("register_data"))
+        email = register_data.email
+        password = register_data.password
+        nama_lengkap = register_data.nama_lengkap
 
         user = auth.create_user(email=email, password=password)
-        
-        # Menyimpan informasi pengguna tambahan ke database Firestore
+
+        # Menyimpan nama lengkap ke Firestore
         user_data = {
-            "ID": register_data.id,
-            "Nama_Lengkap": register_data.nama_lengkap,
-            "Umur": register_data.umur,
-            "Jenis_Kelamin": register_data.jenis_kelamin,
-            "Daerah_Asal": register_data.daerah_asal,
-            "Pengalaman_Bernyanyi": register_data.pengalaman_bernyanyi,
-            "Genre_Musik": register_data.genre_musik,
-            "Keterampilan_Alat_Musik": register_data.keterampilan_alat_musik,
-            "Alamat_Tempat_Tinggal": register_data.alamat_tempat_tinggal,
-            "Latitude": register_data.latitude,
-            "Longitude": register_data.longitude
+            "Nama_Lengkap": nama_lengkap
         }
         db.collection("UserSingerHub").document(user.uid).set(user_data)
         
-        return {"message": "Pengguna berhasil dibuat", "uid": user.uid}
+        return {"message": "Pengguna berhasil didaftarkan", "uid": user.uid}
     except Exception as e:
-        return {"message": "Gagal membuat pengguna", "error": str(e)}
-# Pengujian: 
+        return {"message": "Gagal mendaftarkan pengguna", "error": str(e)}
+
+# Pengujian:
 # curl -X POST -d '{
 #   "email": "ridwan@singerhub.com",
 #   "password": "password123",
-#   "register_data": {
-#     "id": "8G9K6S",
-#     "nama_lengkap": "Rachman Ridwan",
-#     "umur": 25,
-#     "jenis_kelamin": "Laki-laki",
-#     "daerah_asal": "Jakarta",
-#     "pengalaman_bernyanyi": 5,
-#     "genre_musik": "Pop",
-#     "keterampilan_alat_musik": "Gitar",
-#     "alamat_tempat_tinggal": "Jl. Cendrawasih No. 12, Jakarta Pusat",
-#     "latitude": -6.18819,
-#     "longitude": 106.82497
-#   }
-# }' -H "Content-Type: application/json" http://localhost:8000/register
+#   "nama_lengkap": "Rachman Ridwan"
+# }' -H "Content-Type: application/json" http://localhost:8000/register-account
 
 ## Perbarui Profil
 class UpdateProfile(BaseModel):
