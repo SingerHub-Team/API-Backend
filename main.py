@@ -116,7 +116,6 @@ async def register_data_without_auth(request: Request):
         register_data = RegisterData(**data)
 
         user_data = {
-            "ID": register_data.id,
             "Nama_Lengkap": register_data.nama_lengkap,
             "Umur": register_data.umur,
             "Jenis_Kelamin": register_data.jenis_kelamin,
@@ -128,7 +127,7 @@ async def register_data_without_auth(request: Request):
             "Latitude": register_data.latitude,
             "Longitude": register_data.longitude
         }
-        db.collection("UserSingerHub").document(register_data.nama_lengkap).set(user_data)
+        db.collection("UserSingerHub").document(register_data.id).set(user_data)
         
         return {"message": "Data pengguna berhasil disimpan"}
     except Exception as e:

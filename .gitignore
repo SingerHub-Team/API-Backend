@@ -2,3 +2,4 @@
 .venv
 __pycache__
 singerhub-firebase-db.json
+store-user-data-to-db/UserSingerHub.xlsx
