@@ -137,6 +137,52 @@ Endpoint: `/register-account`
 curl -X POST -d '{"email": "ridwan@singerhub.com", "password": "password123", "nama_lengkap": "Ridwan Singer"}' -H "Content-Type: application/json" http://localhost:8000/register-account
 ```
 
+### Register Data by UID
+Menggunakan metode HTTP POST untuk mendaftarkan data pengguna berdasarkan UID.
+
+Endpoint: `/register-data/{uid}`
+
+#### Permintaan
+| Parameter               | Tipe   | Deskripsi                            |
+| ----------------------- | ------ | -------------------------------------|
+| uid                     | string | UID pengguna                         |
+| id                      | string | ID pengguna                          |
+| nama_lengkap            | string | Nama lengkap pengguna                |
+| umur                    | int    | Umur pengguna                        |
+| jenis_kelamin           | string | Jenis kelamin pengguna               |
+| daerah_asal             | string | Daerah asal pengguna                 |
+| pengalaman_bernyanyi    | int    | Pengalaman bernyanyi (dalam tahun)   |
+| genre_musik             | string | Genre musik pengguna                 |
+| keterampilan_alat_musik | string | Keterampilan alat musik pengguna     |
+| alamat_tempat_tinggal   | string | Alamat tempat tinggal pengguna       |
+| latitude                | float  | Latitude koordinat pengguna          |
+| longitude               | float  | Longitude koordinat pengguna         |
+
+#### Respon
+```json
+{
+    "message": "Data pengguna berhasil disimpan"
+}
+```
+
+### Pengujian menggunakan CURL
+```json
+curl -X POST -d '{
+    "id": "USER_ID",
+    "nama_lengkap": "Ridwan Singer",
+    "umur": 25,
+    "jenis_kelamin": "Laki-laki",
+    "daerah_asal": "Jakarta",
+    "pengalaman_bernyanyi": 5,
+    "genre_musik": "Pop",
+    "keterampilan_alat_musik": "Gitar",
+    "alamat_tempat_tinggal": "Jl. Bintaro Raya No. 123",
+    "latitude": -6.123456,
+    "longitude": 106.789012
+}' -H "Content-Type: application/json" http://localhost:8000/register-data/{uid}
+```
+
+
 ### Update Profile by UID
 Menggunakan metode HTTP PUT untuk memperbarui profil pengguna berdasarkan UID.
 
