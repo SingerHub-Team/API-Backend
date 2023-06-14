@@ -109,6 +109,45 @@ class RegisterData(BaseModel):
     latitude: float
     longitude: float
 
+@app.post("/register-data-without-auth")
+async def register_data_without_auth(request: Request):
+    try:
+        data = await request.json()
+        register_data = RegisterData(**data)
+
+        user_data = {
+            "ID": register_data.id,
+            "Nama_Lengkap": register_data.nama_lengkap,
+            "Umur": register_data.umur,
+            "Jenis_Kelamin": register_data.jenis_kelamin,
+            "Daerah_Asal": register_data.daerah_asal,
+            "Pengalaman_Bernyanyi": register_data.pengalaman_bernyanyi,
+            "Genre_Musik": register_data.genre_musik,
+            "Keterampilan_Alat_Musik": register_data.keterampilan_alat_musik,
+            "Alamat_Tempat_Tinggal": register_data.alamat_tempat_tinggal,
+            "Latitude": register_data.latitude,
+            "Longitude": register_data.longitude
+        }
+        db.collection("UserSingerHub").document(register_data.nama_lengkap).set(user_data)
+        
+        return {"message": "Data pengguna berhasil disimpan"}
+    except Exception as e:
+        return {"message": "Gagal menyimpan data pengguna", "error": str(e)}
+# Pengujian:
+# curl -X POST -d '{
+#   "id": "8G9K6S",
+#   "nama_lengkap": "Budi Santoso",
+#   "umur": 25,
+#   "jenis_kelamin": "Laki-laki",
+#   "daerah_asal": "Jakarta",
+#   "pengalaman_bernyanyi": 5,
+#   "genre_musik": "Pop",
+#   "keterampilan_alat_musik": "Gitar",
+#   "alamat_tempat_tinggal": "Jl. Cendrawasih No. 12, Jakarta Pusat",
+#   "latitude": -6.18819,
+#   "longitude": 106.82497
+# }' -H "Content-Type: application/json" http://localhost:8000/register-data-without-auth
+
 @app.post("/register-data/{uid}")
 async def register_data(uid: str, request: Request):
     try:
