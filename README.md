@@ -137,21 +137,26 @@ Endpoint: `/register-account`
 curl -X POST -d '{"email": "ridwan@singerhub.com", "password": "password123", "nama_lengkap": "Ridwan Singer"}' -H "Content-Type: application/json" http://localhost:8000/register-account
 ```
 
-### Update Profile
-Menggunakan metode HTTP PUT untuk memperbarui profil pengguna.
+### Update Profile by UID
+Menggunakan metode HTTP PUT untuk memperbarui profil pengguna berdasarkan UID.
 
 Endpoint: `/update-profile/{uid}`
 
 #### Permintaan
-| Parameter        | Tipe   | Deskripsi                     |
-| ---------------- | ------ | ------------------------------|
-| uid              | string | ID pengguna                   |
-| name             | string | Nama pengguna                 |
-| phone_number     | string | Nomor telepon pengguna        |
-| experience       | string | Pengalaman karir pengguna     |
-| skills           | string | Keahlian pengguna             |
-| country          | string | Negara pengguna               |
-| date_of_birth    | string | Tanggal lahir pengguna (YYYY-MM-DD) |
+| Parameter           | Tipe   | Deskripsi                   |
+| ------------------- | ------ | ----------------------------|
+| uid                 | string | UID pengguna                |
+| id                  | string | ID pengguna                 |
+| nama_lengkap        | string | Nama lengkap pengguna       |
+| umur                | int    | Umur pengguna               |
+| jenis_kelamin       | string | Jenis kelamin pengguna      |
+| daerah_asal         | string | Daerah asal pengguna        |
+| pengalaman_bernyanyi| int    | Pengalaman bernyanyi (dalam tahun) |
+| genre_musik         | string | Genre musik pengguna        |
+| keterampilan_alat_musik | string | Keterampilan alat musik pengguna |
+| alamat_tempat_tinggal | string | Alamat tempat tinggal pengguna |
+| latitude            | float  | Latitude koordinat pengguna |
+| longitude           | float  | Longitude koordinat pengguna|
 
 #### Respon
 ```json
@@ -159,6 +164,23 @@ Endpoint: `/update-profile/{uid}`
     "message": "Profil berhasil diperbarui"
 }
 ```
+
+### Pengujian menggunakan CURL
+```json
+curl -X PUT -d '{
+    "nama_lengkap": "Ridwan Singer",
+    "umur": 25,
+    "jenis_kelamin": "Laki-laki",
+    "daerah_asal": "Jakarta",
+    "pengalaman_bernyanyi": 5,
+    "genre_musik": "Pop",
+    "keterampilan_alat_musik": "Gitar",
+    "alamat_tempat_tinggal": "Jl. Bintaro Raya No. 123",
+    "latitude": -6.123456,
+    "longitude": 106.789012
+}' -H "Content-Type: application/json" http://localhost:8000/update-profile/{uid}
+```
+
 
 ### Pengujian menggunakan CURL
 ```json
