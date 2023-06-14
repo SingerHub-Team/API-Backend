@@ -30,11 +30,36 @@ pip install firebase_admin python-dotenv fastapi pydantic requests uvicorn
 Lalu, untuk mengeksekusi API, tinggal run `uvicorn main:app --host 0.0.0.0 --port 8000` pada terminal direktori `main.py`.
 
 ### Konfigurasi
+1. Clone repositori ini:
+```bash
+git clone https://github.com/SingerHub-Team/API-Backend.git
+```
+
+2. Clone repositori ini:
+```bash
+cd API-Backend
+```
+
+3. Instal dependensi yang diperlukan:
+```bash
+pip install -r requirements.txt
+```
+
+4. Atur variabel lingkungan:
+Buat file .env di direktori proyek dan tambahkan variabel lingkungan berikut:
+```makefile
+API_KEY=<kunci-api-firebase-anda>
+DIR_FIREBASE_CONFIG=<lokasi-file-json-sdk-admin-firebase-anda>
+```
 API ini memerlukan beberapa variabel lingkungan yang harus diatur:
 - API_KEY: Kunci API Firebase.
 - DIR_FIREBASE_CONFIG: Path ke file konfigurasi Firebase.
 
-Pastikan membuat file .env di dalam direktori proyek dan atur variabel lingkungan sesuai dengan kebutuhan.
+5. Jalankan aplikasi:
+```bash
+uvicorn main:app --host 0.0.0.0 --port 8000
+```
+Aplikasi akan dapat diakses di http://localhost:8000.
 
 ## Protokol
 API ini menggunakan protokol HTTP.
