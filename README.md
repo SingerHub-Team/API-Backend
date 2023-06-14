@@ -306,6 +306,42 @@ Endpoint: `/get-user-data?uid={uid}`
 curl -X GET http://localhost:8000/get-user-data?uid={uid}
 ```
 
+## Get User Data by ID
+
+Menggunakan metode HTTP GET untuk mendapatkan data pengguna berdasarkan ID.
+
+Endpoint: `/get-user-data?id={id}`
+
+### Permintaan
+| Parameter | Tipe   | Deskripsi        |
+| --------- | ------ | -----------------|
+| id        | string | ID pengguna      |
+
+### Respon
+```
+{
+    "message": "Data pengguna ditemukan",
+    "user_data": {
+        "id": "USER_ID",
+        "nama_lengkap": "Ridwan Singer",
+        "umur": 25,
+        "jenis_kelamin": "Laki-laki",
+        "daerah_asal": "Jakarta",
+        "pengalaman_bernyanyi": 5,
+        "genre_musik": "Pop",
+        "keterampilan_alat_musik": "Gitar",
+        "alamat_tempat_tinggal": "Jl. Bintaro Raya No. 123",
+        "latitude": -6.123456,
+        "longitude": 106.789012
+    }
+}
+```
+
+### Pengujian menggunakan CURL
+```json
+curl -X GET http://localhost:8000/get-user-data?id={id}
+```
+
 ## Testing menggunakan POSTMAN
 Anda juga dapat menggunakan POSTMAN untuk menguji API ini. Berikut adalah langkah-langkah yang dapat Anda ikuti:
 
