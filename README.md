@@ -112,34 +112,29 @@ Endpoint: `/logout`
 curl -X POST -d '{"id_token": "ID_TOKEN_AUTH_NYA"}' -H "Content-Type: application/json" http://localhost:8000/logout
 ```
 
-### Register User
-Menggunakan metode HTTP POST untuk melakukan registrasi pengguna.
+### Register Account
+Menggunakan metode HTTP POST untuk mendaftarkan akun pengguna.
 
-Endpoint: `/register`
+Endpoint: `/register-account`
 
 #### Permintaan
-| Parameter        | Tipe   | Deskripsi                     |
-| ---------------- | ------ | ------------------------------|
-| email            | string | Email pengguna                |
-| password         | string | Kata sandi pengguna           |
-| name             | string | Nama pengguna                 |
-| phone_number     | string | Nomor telepon pengguna        |
-| experience       | string | Pengalaman pengguna           |
-| skills           | string | Keahlian pengguna             |
-| country          | string | Negara pengguna               |
-| date_of_birth    | string | Tanggal lahir pengguna (YYYY-MM-DD) |
+| Parameter     | Tipe   | Deskripsi           |
+| ------------- | ------ | --------------------|
+| email         | string | Email pengguna      |
+| password      | string | Kata sandi pengguna |
+| nama_lengkap  | string | Nama lengkap        |
 
 #### Respon
 ```json
 {
-    "message": "Pengguna berhasil dibuat",
+    "message": "Pengguna berhasil didaftarkan",
     "uid": "USER_UID"
 }
 ```
 
 ### Pengujian menggunakan CURL
 ```json
-curl -X POST -d '{"email": "ridwan@singerhub.com", "password": "password123", "name": "Rachman Ridwan", "phone_number": "21312312", "experience": "5 tahun", "skills": "Python, JavaScript", "country": "Malaysia", "date_of_birth": "1990-01-01"}' -H "Content-Type: application/json" http://localhost:8000/register
+curl -X POST -d '{"email": "ridwan@singerhub.com", "password": "password123", "nama_lengkap": "Ridwan Singer"}' -H "Content-Type: application/json" http://localhost:8000/register-account
 ```
 
 ### Update Profile
