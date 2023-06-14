@@ -181,10 +181,47 @@ curl -X PUT -d '{
 }' -H "Content-Type: application/json" http://localhost:8000/update-profile/{uid}
 ```
 
+### Update Profile by ID
+Menggunakan metode HTTP PUT untuk memperbarui profil pengguna berdasarkan ID.
+
+Endpoint: `/update-profile-by-id/{id}`
+
+#### Permintaan
+| Parameter           | Tipe   | Deskripsi                   |
+| ------------------- | ------ | ----------------------------|
+| id                  | string | ID pengguna                 |
+| nama_lengkap        | string | Nama lengkap pengguna       |
+| umur                | int    | Umur pengguna               |
+| jenis_kelamin       | string | Jenis kelamin pengguna      |
+| daerah_asal         | string | Daerah asal pengguna        |
+| pengalaman_bernyanyi| int    | Pengalaman bernyanyi (dalam tahun) |
+| genre_musik         | string | Genre musik pengguna        |
+| keterampilan_alat_musik | string | Keterampilan alat musik pengguna |
+| alamat_tempat_tinggal | string | Alamat tempat tinggal pengguna |
+| latitude            | float  | Latitude koordinat pengguna |
+| longitude           | float  | Longitude koordinat pengguna|
+
+#### Respon
+```json
+{
+    "message": "Profil berhasil diperbarui"
+}
+```
 
 ### Pengujian menggunakan CURL
 ```json
-curl -X PUT -d '{"name": "R. Ridwan", "phone_number": "08210310231", "experience": "10 tahun", "skills": "C++, C#, Python", "country": "Indonesia", "date_of_birth": "2002-09-29"}' -H "Content-Type: application/json" http://localhost:8000/update-profile/USER_UID
+curl -X PUT -d '{
+    "nama_lengkap": "Ridwan Singer",
+    "umur": 25,
+    "jenis_kelamin": "Laki-laki",
+    "daerah_asal": "Jakarta",
+    "pengalaman_bernyanyi": 5,
+    "genre_musik": "Pop",
+    "keterampilan_alat_musik": "Gitar",
+    "alamat_tempat_tinggal": "Jl. Bintaro Raya No. 123",
+    "latitude": -6.123456,
+    "longitude": 106.789012
+}' -H "Content-Type: application/json" http://localhost:8000/update-profile-by-id/{id}
 ```
 
 ## Testing menggunakan POSTMAN
