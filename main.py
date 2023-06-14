@@ -96,8 +96,20 @@ async def register_account(register_data: RegisterUser):
 #   "nama_lengkap": "Rachman Ridwan"
 # }' -H "Content-Type: application/json" http://localhost:8000/register-account
 
-class RegisterData(BaseModel):
+class UserData(BaseModel):
     id: str
+    nama_lengkap: str
+    umur: int
+    jenis_kelamin: str
+    daerah_asal: str
+    pengalaman_bernyanyi: int
+    genre_musik: str
+    keterampilan_alat_musik: str
+    alamat_tempat_tinggal: str
+    latitude: float
+    longitude: float
+    
+class UserDataWithoutID(BaseModel):
     nama_lengkap: str
     umur: int
     jenis_kelamin: str
@@ -151,7 +163,7 @@ async def register_data_without_auth(request: Request):
 async def register_data(uid: str, request: Request):
     try:
         data = await request.json()
-        register_data = RegisterData(**data)
+        register_data = UserData(**data)
 
         user_data = {
             "ID": register_data.id,
@@ -187,23 +199,10 @@ async def register_data(uid: str, request: Request):
 # }' -H "Content-Type: application/json" http://localhost:8000/register-data/USER_UID
 
 ## Perbarui Profil
-class UpdateProfile(BaseModel):
-    id: str
-    nama_lengkap: str
-    umur: int
-    jenis_kelamin: str
-    daerah_asal: str
-    pengalaman_bernyanyi: int
-    genre_musik: str
-    keterampilan_alat_musik: str
-    alamat_tempat_tinggal: str
-    latitude: float
-    longitude: float
-
 @app.put("/update-profile/{uid}")
-async def update_profile(uid: str, profile_update: UpdateProfile):
+async def update_profile(uid: str, user_data: UserData):
     try:
-        data = profile_update.dict()
+        data = user_data.dict()
         # Memperbarui profil pengguna di database Firestore
         updated_data = {
             "ID": data.get("id"),
@@ -219,6 +218,28 @@ async def update_profile(uid: str, profile_update: UpdateProfile):
             "Longitude": data.get("longitude")
         }
         db.collection("UserSingerHub").document(uid).update(updated_data)
+        return {"message": "Profil berhasil diperbarui"}
+    except Exception as e:
+        return {"message": "Gagal memperbarui profil", "error": str(e)}
+
+@app.put("/update-profile-by-id/{id}")
+async def update_profile_by_id(id: str, user_data: UserDataWithoutID):
+    try:
+        data = user_data.dict()
+        # Memperbarui profil pengguna di database Firestore
+        updated_data = {
+            "Nama_Lengkap": data.get("nama_lengkap"),
+            "Umur": data.get("umur"),
+            "Jenis_Kelamin": data.get("jenis_kelamin"),
+            "Daerah_Asal": data.get("daerah_asal"),
+            "Pengalaman_Bernyanyi": data.get("pengalaman_bernyanyi"),
+            "Genre_Musik": data.get("genre_musik"),
+            "Keterampilan_Alat_Musik": data.get("keterampilan_alat_musik"),
+            "Alamat_Tempat_Tinggal": data.get("alamat_tempat_tinggal"),
+            "Latitude": data.get("latitude"),
+            "Longitude": data.get("longitude")
+        }
+        db.collection("UserSingerHub").document(id).update(updated_data)
         return {"message": "Profil berhasil diperbarui"}
     except Exception as e:
         return {"message": "Gagal memperbarui profil", "error": str(e)}
