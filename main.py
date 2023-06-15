@@ -117,7 +117,7 @@ class UserDataWithoutID(BaseModel):
 async def register_data_without_auth(request: Request):
     try:
         data = await request.json()
-        register_data = RegisterData(**data)
+        register_data = UserData(**data)
 
         user_data = {
             "Nama_Lengkap": register_data.nama_lengkap,
