@@ -2,12 +2,11 @@ import firebase_admin
 from dotenv import load_dotenv
 from firebase_admin import credentials, auth, firestore
 from fastapi import FastAPI, Request
-from pydantic import BaseModel
 import requests
 import os
 
 # pip install python-dotenv
-# Load variabel environment dari file .env
+# Load environment variables from the .env file
 load_dotenv()
 API_KEY = os.getenv("API_KEY")
 DIR_FIREBASE_CONFIG = os.getenv("DIR_FIREBASE_CONFIG")
@@ -25,21 +24,21 @@ async def login_user(request: Request):
         email = data.get("email")
         password = data.get("password")
 
-        # Membuat payload permintaan
+        # Create request payload
         payload = {
             "email": email,
             "password": password,
             "returnSecureToken": True
         }
 
-        # Mengirim permintaan ke API REST Firebase Authentication
+        # Send request to Firebase Authentication REST API
         response = requests.post(
             "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword",
             params={"key": API_KEY},
             json=payload
         )
 
-        # Memeriksa status respons dan mengambil ID pengguna
+        # Check response status and retrieve user ID
         if response.status_code == 200:
             user_data = response.json()
             uid = user_data["localId"]
@@ -58,27 +57,23 @@ async def logout_user(request: Request):
         data = await request.json()
         uid = data.get("uid")
 
-        # Mencabut sesi pengguna dan membatalkan token ID yang valid
+        # Revoke user session and invalidate valid ID token
         auth.revoke_refresh_tokens(uid)
         return {"message": "Logout berhasil"}
     except Exception as e:
         return {"message": "Logout gagal", "error": str(e)}
 
-class RegisterUser(BaseModel):
-    email: str
-    password: str
-    nama_lengkap: str
-
 @app.post("/register-account")
-async def register_account(register_data: RegisterUser):
+async def register_account(request: Request):
     try:
-        email = register_data.email
-        password = register_data.password
-        nama_lengkap = register_data.nama_lengkap
+        data = await request.json()
+        email = data.get("email")
+        password = data.get("password")
+        nama_lengkap = data.get("nama_lengkap")
 
         user = auth.create_user(email=email, password=password)
 
-        # Menyimpan nama lengkap ke Firestore
+        # Save full name to Firestore
         user_data = {
             "Nama_Lengkap": nama_lengkap
         }
@@ -88,50 +83,34 @@ async def register_account(register_data: RegisterUser):
     except Exception as e:
         return {"message": "Gagal mendaftarkan pengguna", "error": str(e)}
 
-class UserData(BaseModel):
-    id: str
-    nama_lengkap: str
-    umur: int
-    jenis_kelamin: str
-    daerah_asal: str
-    pengalaman_bernyanyi: int
-    genre_musik: str
-    keterampilan_alat_musik: str
-    alamat_tempat_tinggal: str
-    latitude: float
-    longitude: float
-    
-class UserDataWithoutID(BaseModel):
-    nama_lengkap: str
-    umur: int
-    jenis_kelamin: str
-    daerah_asal: str
-    pengalaman_bernyanyi: int
-    genre_musik: str
-    keterampilan_alat_musik: str
-    alamat_tempat_tinggal: str
-    latitude: float
-    longitude: float
-
 @app.post("/register-data-without-auth")
 async def register_data_without_auth(request: Request):
     try:
         data = await request.json()
-        register_data = UserData(**data)
+        nama_lengkap = data.get("nama_lengkap")
+        umur = data.get("umur")
+        jenis_kelamin = data.get("jenis_kelamin")
+        daerah_asal = data.get("daerah_asal")
+        pengalaman_bernyanyi = data.get("pengalaman_bernyanyi")
+        genre_musik = data.get("genre_musik")
+        keterampilan_alat_musik = data.get("keterampilan_alat_musik")
+        alamat_tempat_tinggal = data.get("alamat_tempat_tinggal")
+        latitude = data.get("latitude")
+        longitude = data.get("longitude")
 
         user_data = {
-            "Nama_Lengkap": register_data.nama_lengkap,
-            "Umur": register_data.umur,
-            "Jenis_Kelamin": register_data.jenis_kelamin,
-            "Daerah_Asal": register_data.daerah_asal,
-            "Pengalaman_Bernyanyi": register_data.pengalaman_bernyanyi,
-            "Genre_Musik": register_data.genre_musik,
-            "Keterampilan_Alat_Musik": register_data.keterampilan_alat_musik,
-            "Alamat_Tempat_Tinggal": register_data.alamat_tempat_tinggal,
-            "Latitude": register_data.latitude,
-            "Longitude": register_data.longitude
+            "Nama_Lengkap": nama_lengkap,
+            "Umur": umur,
+            "Jenis_Kelamin": jenis_kelamin,
+            "Daerah_Asal": daerah_asal,
+            "Pengalaman_Bernyanyi": pengalaman_bernyanyi,
+            "Genre_Musik": genre_musik,
+            "Keterampilan_Alat_Musik": keterampilan_alat_musik,
+            "Alamat_Tempat_Tinggal": alamat_tempat_tinggal,
+            "Latitude": latitude,
+            "Longitude": longitude
         }
-        db.collection("UserSingerHub").document(register_data.id).set(user_data)
+        db.collection("UserSingerHub").document().set(user_data)
         
         return {"message": "Data pengguna berhasil disimpan"}
     except Exception as e:
@@ -141,20 +120,28 @@ async def register_data_without_auth(request: Request):
 async def register_data(uid: str, request: Request):
     try:
         data = await request.json()
-        register_data = UserData(**data)
+        nama_lengkap = data.get("nama_lengkap")
+        umur = data.get("umur")
+        jenis_kelamin = data.get("jenis_kelamin")
+        daerah_asal = data.get("daerah_asal")
+        pengalaman_bernyanyi = data.get("pengalaman_bernyanyi")
+        genre_musik = data.get("genre_musik")
+        keterampilan_alat_musik = data.get("keterampilan_alat_musik")
+        alamat_tempat_tinggal = data.get("alamat_tempat_tinggal")
+        latitude = data.get("latitude")
+        longitude = data.get("longitude")
 
         user_data = {
-            "ID": register_data.id,
-            "Nama_Lengkap": register_data.nama_lengkap,
-            "Umur": register_data.umur,
-            "Jenis_Kelamin": register_data.jenis_kelamin,
-            "Daerah_Asal": register_data.daerah_asal,
-            "Pengalaman_Bernyanyi": register_data.pengalaman_bernyanyi,
-            "Genre_Musik": register_data.genre_musik,
-            "Keterampilan_Alat_Musik": register_data.keterampilan_alat_musik,
-            "Alamat_Tempat_Tinggal": register_data.alamat_tempat_tinggal,
-            "Latitude": register_data.latitude,
-            "Longitude": register_data.longitude
+            "Nama_Lengkap": nama_lengkap,
+            "Umur": umur,
+            "Jenis_Kelamin": jenis_kelamin,
+            "Daerah_Asal": daerah_asal,
+            "Pengalaman_Bernyanyi": pengalaman_bernyanyi,
+            "Genre_Musik": genre_musik,
+            "Keterampilan_Alat_Musik": keterampilan_alat_musik,
+            "Alamat_Tempat_Tinggal": alamat_tempat_tinggal,
+            "Latitude": latitude,
+            "Longitude": longitude
         }
         db.collection("UserSingerHub").document(uid).set(user_data)
         
@@ -162,24 +149,33 @@ async def register_data(uid: str, request: Request):
     except Exception as e:
         return {"message": "Gagal menyimpan data pengguna", "error": str(e)}
 
-## Perbarui Profil
 @app.put("/update-profile/{uid}")
-async def update_profile(uid: str, user_data: UserData):
+async def update_profile(uid: str, request: Request):
     try:
-        data = user_data.dict()
-        # Memperbarui profil pengguna di database Firestore
+        data = await request.json()
+        nama_lengkap = data.get("nama_lengkap")
+        umur = data.get("umur")
+        jenis_kelamin = data.get("jenis_kelamin")
+        daerah_asal = data.get("daerah_asal")
+        pengalaman_bernyanyi = data.get("pengalaman_bernyanyi")
+        genre_musik = data.get("genre_musik")
+        keterampilan_alat_musik = data.get("keterampilan_alat_musik")
+        alamat_tempat_tinggal = data.get("alamat_tempat_tinggal")
+        latitude = data.get("latitude")
+        longitude = data.get("longitude")
+
+        # Update user profile in Firestore
         updated_data = {
-            "ID": data.get("id"),
-            "Nama_Lengkap": data.get("nama_lengkap"),
-            "Umur": data.get("umur"),
-            "Jenis_Kelamin": data.get("jenis_kelamin"),
-            "Daerah_Asal": data.get("daerah_asal"),
-            "Pengalaman_Bernyanyi": data.get("pengalaman_bernyanyi"),
-            "Genre_Musik": data.get("genre_musik"),
-            "Keterampilan_Alat_Musik": data.get("keterampilan_alat_musik"),
-            "Alamat_Tempat_Tinggal": data.get("alamat_tempat_tinggal"),
-            "Latitude": data.get("latitude"),
-            "Longitude": data.get("longitude")
+            "Nama_Lengkap": nama_lengkap,
+            "Umur": umur,
+            "Jenis_Kelamin": jenis_kelamin,
+            "Daerah_Asal": daerah_asal,
+            "Pengalaman_Bernyanyi": pengalaman_bernyanyi,
+            "Genre_Musik": genre_musik,
+            "Keterampilan_Alat_Musik": keterampilan_alat_musik,
+            "Alamat_Tempat_Tinggal": alamat_tempat_tinggal,
+            "Latitude": latitude,
+            "Longitude": longitude
         }
         db.collection("UserSingerHub").document(uid).update(updated_data)
         return {"message": "Profil berhasil diperbarui"}
@@ -187,28 +183,38 @@ async def update_profile(uid: str, user_data: UserData):
         return {"message": "Gagal memperbarui profil", "error": str(e)}
 
 @app.put("/update-profile-by-id/{id}")
-async def update_profile_by_id(id: str, user_data: UserDataWithoutID):
+async def update_profile_by_id(id: str, request: Request):
     try:
-        data = user_data.dict()
-        # Memperbarui profil pengguna di database Firestore
+        data = await request.json()
+        nama_lengkap = data.get("nama_lengkap")
+        umur = data.get("umur")
+        jenis_kelamin = data.get("jenis_kelamin")
+        daerah_asal = data.get("daerah_asal")
+        pengalaman_bernyanyi = data.get("pengalaman_bernyanyi")
+        genre_musik = data.get("genre_musik")
+        keterampilan_alat_musik = data.get("keterampilan_alat_musik")
+        alamat_tempat_tinggal = data.get("alamat_tempat_tinggal")
+        latitude = data.get("latitude")
+        longitude = data.get("longitude")
+
+        # Update user profile in Firestore
         updated_data = {
-            "Nama_Lengkap": data.get("nama_lengkap"),
-            "Umur": data.get("umur"),
-            "Jenis_Kelamin": data.get("jenis_kelamin"),
-            "Daerah_Asal": data.get("daerah_asal"),
-            "Pengalaman_Bernyanyi": data.get("pengalaman_bernyanyi"),
-            "Genre_Musik": data.get("genre_musik"),
-            "Keterampilan_Alat_Musik": data.get("keterampilan_alat_musik"),
-            "Alamat_Tempat_Tinggal": data.get("alamat_tempat_tinggal"),
-            "Latitude": data.get("latitude"),
-            "Longitude": data.get("longitude")
+            "Nama_Lengkap": nama_lengkap,
+            "Umur": umur,
+            "Jenis_Kelamin": jenis_kelamin,
+            "Daerah_Asal": daerah_asal,
+            "Pengalaman_Bernyanyi": pengalaman_bernyanyi,
+            "Genre_Musik": genre_musik,
+            "Keterampilan_Alat_Musik": keterampilan_alat_musik,
+            "Alamat_Tempat_Tinggal": alamat_tempat_tinggal,
+            "Latitude": latitude,
+            "Longitude": longitude
         }
         db.collection("UserSingerHub").document(id).update(updated_data)
         return {"message": "Profil berhasil diperbarui"}
     except Exception as e:
         return {"message": "Gagal memperbarui profil", "error": str(e)}
 
-## API Get User Data
 @app.get("/get-user-data")
 async def get_user_data(uid: str = None, id: str = None):
     try:
@@ -233,6 +239,6 @@ async def get_user_data(uid: str = None, id: str = None):
         return {"message": "Gagal mendapatkan data pengguna", "error": str(e)}
 
 if __name__ == "__main__":
-    # jalankan: uvicorn main:app --host 0.0.0.0 --port 8000
+    # Run using: uvicorn main:app --host 0.0.0.0 --port 8000
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
