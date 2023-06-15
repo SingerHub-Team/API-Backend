@@ -122,7 +122,7 @@ async def register_data(uid: str, request: Request):
     try:
         # Validate UID
         try:
-            user = auth.get_user(uid)
+            auth.get_user(uid)
         except ValueError as e:
             if str(e) == "Cannot find user.":
                 return {"message": "Invalid UID"}
@@ -162,7 +162,7 @@ async def update_profile(uid: str, request: Request):
     try:
         # Validate UID
         try:
-            user = auth.get_user(uid)
+            auth.get_user(uid)
         except ValueError as e:
             if str(e) == "Cannot find user.":
                 return {"message": "Invalid UID"}
