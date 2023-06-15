@@ -87,6 +87,7 @@ async def register_account(request: Request):
 async def register_data_without_auth(request: Request):
     try:
         data = await request.json()
+        id = data.get("id")
         nama_lengkap = data.get("nama_lengkap")
         umur = data.get("umur")
         jenis_kelamin = data.get("jenis_kelamin")
@@ -110,7 +111,7 @@ async def register_data_without_auth(request: Request):
             "Latitude": latitude,
             "Longitude": longitude
         }
-        db.collection("UserSingerHub").document().set(user_data)
+        db.collection("UserSingerHub").document(id).set(user_data)
         
         return {"message": "Data pengguna berhasil disimpan"}
     except Exception as e:
@@ -119,6 +120,13 @@ async def register_data_without_auth(request: Request):
 @app.post("/register-data/{uid}")
 async def register_data(uid: str, request: Request):
     try:
+        # Validate UID
+        try:
+            user = auth.get_user(uid)
+        except ValueError as e:
+            if str(e) == "Cannot find user.":
+                return {"message": "Invalid UID"}
+
         data = await request.json()
         nama_lengkap = data.get("nama_lengkap")
         umur = data.get("umur")
@@ -144,7 +152,7 @@ async def register_data(uid: str, request: Request):
             "Longitude": longitude
         }
         db.collection("UserSingerHub").document(uid).set(user_data)
-        
+
         return {"message": "Data pengguna berhasil disimpan"}
     except Exception as e:
         return {"message": "Gagal menyimpan data pengguna", "error": str(e)}
@@ -152,6 +160,13 @@ async def register_data(uid: str, request: Request):
 @app.put("/update-profile/{uid}")
 async def update_profile(uid: str, request: Request):
     try:
+        # Validate UID
+        try:
+            user = auth.get_user(uid)
+        except ValueError as e:
+            if str(e) == "Cannot find user.":
+                return {"message": "Invalid UID"}
+
         data = await request.json()
         nama_lengkap = data.get("nama_lengkap")
         umur = data.get("umur")
@@ -178,6 +193,7 @@ async def update_profile(uid: str, request: Request):
             "Longitude": longitude
         }
         db.collection("UserSingerHub").document(uid).update(updated_data)
+
         return {"message": "Profil berhasil diperbarui"}
     except Exception as e:
         return {"message": "Gagal memperbarui profil", "error": str(e)}
