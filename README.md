@@ -11,7 +11,6 @@ Sebelum menjalankan aplikasi, pastikan Anda memiliki prasyarat berikut:
 - `pip` package manager
 - Proyek Firebase dengan Firestore diaktifkan
 - Kredensial SDK Admin Firebase (file JSON)
-- Paket `python-dotenv` (instal dengan `pip install python-dotenv`)
 
 Serta, pastikan dependensi berikut sudah terinstal:
 - `firebase_admin`
