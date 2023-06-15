@@ -1,5 +1,5 @@
 # Dokumentasi API - Rachman Ridwan (C23-PC608) | SingerHub Team
-URL Postman: https://www.postman.com/lunar-module-participant-68081250/workspace/singerhub/request/26400697-ed301b10-2a7b-4162-816e-5899203fe5dc
+
 ## Deskripsi
 API yang telah dibuat adalah sebuah RESTful API yang digunakan untuk melakukan operasi otentikasi pengguna (Register, Login, Logout) dan operasi pembaruan profil pengguna.
 
